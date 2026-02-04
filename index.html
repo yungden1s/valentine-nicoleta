@@ -13,78 +13,59 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #ffe4e1;
+            background-color: #ffdeeb;
             font-family: 'Poppins', sans-serif;
-            overflow: hidden; /* Ascunde pisicile care ies din ecran */
+            overflow: hidden;
         }
 
         .container {
             background: white;
-            padding: 50px 30px;
+            padding: 30px;
             border-radius: 30px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             text-align: center;
             width: 90%;
-            max-width: 450px;
+            max-width: 400px;
             position: relative;
-            min-height: 400px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 10; /* Asigură că mesajul e peste pisici */
+            z-index: 10;
         }
 
-        /* Inima desenată în CSS */
-        .heart-draw {
-            width: 80px;
-            height: 80px;
-            background-color: #ff4d6d;
-            position: relative;
-            transform: rotate(-45deg);
-            margin-bottom: 50px;
-            animation: beat 1s infinite;
-        }
-        .heart-draw::before, .heart-draw::after {
-            content: '';
-            width: 80px;
-            height: 80px;
-            background-color: #ff4d6d;
-            border-radius: 50%;
-            position: absolute;
-        }
-        .heart-draw::before { top: -40px; left: 0; }
-        .heart-draw::after { top: 0; left: 40px; }
-
-        @keyframes beat {
-            0%, 100% { transform: rotate(-45deg) scale(1); }
-            50% { transform: rotate(-45deg) scale(1.15); }
+        /* Personajul animat (Pisica) */
+        .cat-gif {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 10px;
+            object-fit: contain;
         }
 
         h1 {
             font-family: 'Dancing Script', cursive;
             color: #d63384;
-            font-size: 2.2rem;
+            font-size: 2rem;
             margin: 10px 0;
         }
 
-        p { color: #555; margin-bottom: 30px; }
+        p { color: #666; font-size: 0.9rem; margin-bottom: 20px; }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            height: 100px; /* Spatiu pentru cresterea butonului */
+        }
 
         .btn {
-            padding: 15px 35px;
+            padding: 12px 25px;
             border: none;
             border-radius: 50px;
             font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s;
         }
 
-        #yesBtn {
-            background-color: #ff4d6d;
-            color: white;
-            z-index: 10;
-        }
+        #yesBtn { background-color: #ff4d6d; color: white; }
 
         #noBtn {
             background-color: #adb5bd;
@@ -92,46 +73,17 @@
             position: absolute;
             transition: 0.1s;
         }
-
-        /* Inimi pentru ploaia de dupa DA */
-        .heart-rain {
-            position: fixed;
-            top: -20px;
-            font-size: 20px;
-            pointer-events: none;
-            animation: fall 3s linear forwards;
-        }
-
-        @keyframes fall {
-            to { transform: translateY(110vh); }
-        }
-
-        /* Pisicile animate */
-        .floating-cat {
-            position: fixed;
-            font-size: 30px; /* Dimensiunea pisicii */
-            pointer-events: none;
-            z-index: 5; /* Sub container, dar peste fundal */
-            animation: floatCat 15s linear infinite; /* Animație mai lungă și lentă */
-            opacity: 0.7; /* Să nu fie prea pregnante */
-        }
-
-        @keyframes floatCat {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.7; }
-            90% { opacity: 0.7; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-        }
     </style>
 </head>
 <body>
 
     <div class="container" id="mainCard">
-        <div class="heart-draw" id="icon"></div>
+        <img id="catImg" class="cat-gif" src="https://media.tenor.com/IC9_sh9K96MAAAAi/peach-goma.gif" alt="Cat dancing">
+        
         <h1 id="title">Nicoleta, vrei să fii Valentine-ul meu?</h1>
         <p id="sub">Suntem de 9 luni împreună, n-ai cum să zici nu! 😂</p>
         
-        <div style="margin-top: 20px;">
+        <div class="btn-container">
             <button id="yesBtn" class="btn" onclick="celebrate()">DA!</button>
             <button id="noBtn" class="btn" onmouseover="moveNo()">Nu</button>
         </div>
@@ -139,58 +91,55 @@
 
     <script>
         let yesScale = 1;
-        const catEmojis = ['🐈', '😻', '🐾']; // Mai multe tipuri de pisici/labuțe
-
-        // Generăm pisici care plutesc din start
-        for (let i = 0; i < 15; i++) { // 15 pisici în fundal
-            createFloatingCat();
-        }
-
-        function createFloatingCat() {
-            const cat = document.createElement('div');
-            cat.classList.add('floating-cat');
-            cat.innerHTML = catEmojis[Math.floor(Math.random() * catEmojis.length)];
-            cat.style.left = Math.random() * 100 + 'vw';
-            cat.style.animationDelay = Math.random() * 10 + 's'; // Pleacă la momente diferite
-            document.body.appendChild(cat);
-            // Nu se elimină, animația infinite le ține pe ecran
-        }
+        const catImg = document.getElementById('catImg');
 
         function moveNo() {
             const noBtn = document.getElementById('noBtn');
             const card = document.getElementById('mainCard');
             
-            const padding = 20;
-            const maxX = card.clientWidth - noBtn.offsetWidth - padding;
-            const maxY = card.clientHeight - noBtn.offsetHeight - padding;
+            // Schimbăm pisica în una tristă/șocată
+            catImg.src = "https://media.tenor.com/9vYFvR2R9m0AAAAi/sad-cute.gif";
+
+            // Limităm mișcarea butonului în container
+            const maxX = card.clientWidth - noBtn.offsetWidth - 20;
+            const maxY = card.clientHeight - noBtn.offsetHeight - 20;
 
             const randomX = Math.floor(Math.random() * maxX);
             const randomY = Math.floor(Math.random() * maxY);
 
-            // Folosim "relative" la card și "absolute" la buton ca să se miște în interior
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
 
-            yesScale += 0.2;
+            // Mărim butonul DA
+            yesScale += 0.3;
             document.getElementById('yesBtn').style.transform = `scale(${yesScale})`;
         }
 
         function celebrate() {
             const card = document.getElementById('mainCard');
             card.innerHTML = `
-                <div class="heart-draw"></div>
+                <img class="cat-gif" src="https://media.tenor.com/6_mY95Xw_S8AAAAi/mochi-peach.gif">
                 <h1>TE IUBESC! ❤️</h1>
                 <p>Abia aștept 14 februarie alături de tine!</p>
             `;
-            setInterval(rain, 150); // Pornește ploaia de inimi
+            
+            // Ploaie de inimi colorate
+            setInterval(createHeart, 200);
         }
 
-        function rain() {
+        function createHeart() {
             const h = document.createElement('div');
-            h.classList.add('heart-rain');
             h.innerHTML = '❤️';
+            h.style.position = 'fixed';
             h.style.left = Math.random() * 100 + 'vw';
+            h.style.top = '-20px';
+            h.style.fontSize = Math.random() * 20 + 10 + 'px';
+            h.style.transition = 'transform 3s linear';
             document.body.appendChild(h);
+            
+            setTimeout(() => {
+                h.style.transform = 'translateY(110vh)';
+            }, 50);
             setTimeout(() => h.remove(), 3000);
         }
     </script>
