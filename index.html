@@ -15,7 +15,7 @@
             align-items: center;
             background-color: #ffe4e1;
             font-family: 'Poppins', sans-serif;
-            overflow: hidden;
+            overflow: hidden; /* Ascunde pisicile care ies din ecran */
         }
 
         .container {
@@ -26,12 +26,13 @@
             text-align: center;
             width: 90%;
             max-width: 450px;
-            position: relative; /* Containerul devine referință pentru butonul de Nu */
+            position: relative;
             min-height: 400px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            z-index: 10; /* Asigură că mesajul e peste pisici */
         }
 
         /* Inima desenată în CSS */
@@ -88,10 +89,11 @@
         #noBtn {
             background-color: #adb5bd;
             color: white;
-            position: absolute; /* Se mișcă relativ la container */
+            position: absolute;
             transition: 0.1s;
         }
 
+        /* Inimi pentru ploaia de dupa DA */
         .heart-rain {
             position: fixed;
             top: -20px;
@@ -102,6 +104,23 @@
 
         @keyframes fall {
             to { transform: translateY(110vh); }
+        }
+
+        /* Pisicile animate */
+        .floating-cat {
+            position: fixed;
+            font-size: 30px; /* Dimensiunea pisicii */
+            pointer-events: none;
+            z-index: 5; /* Sub container, dar peste fundal */
+            animation: floatCat 15s linear infinite; /* Animație mai lungă și lentă */
+            opacity: 0.7; /* Să nu fie prea pregnante */
+        }
+
+        @keyframes floatCat {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
@@ -120,12 +139,27 @@
 
     <script>
         let yesScale = 1;
+        const catEmojis = ['🐈', '😻', '🐾']; // Mai multe tipuri de pisici/labuțe
+
+        // Generăm pisici care plutesc din start
+        for (let i = 0; i < 15; i++) { // 15 pisici în fundal
+            createFloatingCat();
+        }
+
+        function createFloatingCat() {
+            const cat = document.createElement('div');
+            cat.classList.add('floating-cat');
+            cat.innerHTML = catEmojis[Math.floor(Math.random() * catEmojis.length)];
+            cat.style.left = Math.random() * 100 + 'vw';
+            cat.style.animationDelay = Math.random() * 10 + 's'; // Pleacă la momente diferite
+            document.body.appendChild(cat);
+            // Nu se elimină, animația infinite le ține pe ecran
+        }
 
         function moveNo() {
             const noBtn = document.getElementById('noBtn');
             const card = document.getElementById('mainCard');
             
-            // Limităm mișcarea butonului DOAR în interiorul cardului alb
             const padding = 20;
             const maxX = card.clientWidth - noBtn.offsetWidth - padding;
             const maxY = card.clientHeight - noBtn.offsetHeight - padding;
@@ -133,10 +167,10 @@
             const randomX = Math.floor(Math.random() * maxX);
             const randomY = Math.floor(Math.random() * maxY);
 
+            // Folosim "relative" la card și "absolute" la buton ca să se miște în interior
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
 
-            // Facem butonul DA mai mare la fiecare încercare
             yesScale += 0.2;
             document.getElementById('yesBtn').style.transform = `scale(${yesScale})`;
         }
@@ -148,7 +182,7 @@
                 <h1>TE IUBESC! ❤️</h1>
                 <p>Abia aștept 14 februarie alături de tine!</p>
             `;
-            setInterval(rain, 150);
+            setInterval(rain, 150); // Pornește ploaia de inimi
         }
 
         function rain() {
