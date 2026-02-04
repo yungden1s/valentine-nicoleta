@@ -20,7 +20,7 @@
 
         .container {
             background: white;
-            padding: 40px 20px;
+            padding: 30px;
             border-radius: 30px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             text-align: center;
@@ -31,8 +31,8 @@
         }
 
         .cat-gif {
-            width: 200px;
-            height: 200px;
+            width: 180px;
+            height: 180px;
             margin-bottom: 10px;
             object-fit: contain;
         }
@@ -50,25 +50,24 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
-            height: 150px; /* Spatiu pentru cresterea butonului */
+            gap: 15px;
+            min-height: 120px; /* Spațiu pentru mișcare */
             position: relative;
         }
 
         .btn {
-            padding: 15px 30px;
+            padding: 12px 25px;
             border: none;
             border-radius: 50px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.2s ease;
         }
 
         #yesBtn {
             background-color: #ff4d6d;
             color: white;
-            position: relative;
             z-index: 20;
         }
 
@@ -76,14 +75,14 @@
             background-color: #adb5bd;
             color: white;
             position: absolute;
-            transition: 0.1s;
             z-index: 15;
+            transition: 0.1s;
         }
 
         .heart-rain {
             position: fixed;
             top: -20px;
-            font-size: 25px;
+            font-size: 20px;
             pointer-events: none;
             animation: fall 3s linear forwards;
             z-index: 100;
@@ -102,7 +101,7 @@
         <h1 id="title">Nicoleta, vrei să fii Valentine-ul meu? ❤️</h1>
         <p id="sub">Suntem de 9 luni împreună, n-ai cum să zici nu! 😂</p>
         
-        <div class="btn-container">
+        <div class="btn-container" id="area">
             <button id="yesBtn" class="btn" onclick="celebrate()">DA!</button>
             <button id="noBtn" class="btn" onmouseover="moveNo()">Nu</button>
         </div>
@@ -114,14 +113,14 @@
 
         function moveNo() {
             const noBtn = document.getElementById('noBtn');
-            const card = document.getElementById('mainCard');
+            const area = document.getElementById('area');
             
-            // Schimbam GIF-ul cu pisica trista cand vrea sa dea pe Nu
+            // Schimbăm în pisica tristă
             catImg.src = "https://media.tenor.com/9vYFvR2R9m0AAAAi/sad-cute.gif";
 
-            // Calculam limitele in interiorul cardului
-            const maxX = card.clientWidth - noBtn.offsetWidth - 20;
-            const maxY = card.clientHeight - noBtn.offsetHeight - 20;
+            // Calculăm poziția relativă la zona butoanelor pentru a nu fugi din card
+            const maxX = area.clientWidth - noBtn.offsetWidth;
+            const maxY = area.clientHeight - noBtn.offsetHeight;
 
             const randomX = Math.floor(Math.random() * maxX);
             const randomY = Math.floor(Math.random() * maxY);
@@ -129,14 +128,14 @@
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
 
-            // Butonul DA creste
-            yesScale += 0.3;
+            // Mărim butonul DA
+            yesScale += 0.25;
             document.getElementById('yesBtn').style.transform = `scale(${yesScale})`;
         }
 
         function celebrate() {
-            const card = document.getElementById('mainCard');
-            card.innerHTML = `
+            const container = document.getElementById('mainCard');
+            container.innerHTML = `
                 <img class="cat-gif" src="https://media.tenor.com/6_mY95Xw_S8AAAAi/mochi-peach.gif">
                 <h1>TE IUBESC! ❤️</h1>
                 <p>Abia aștept 14 februarie alături de tine!</p>
